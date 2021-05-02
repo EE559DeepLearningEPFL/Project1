@@ -4,6 +4,8 @@ from torch.utils.data import TensorDataset, DataLoader
 def load_data(N=1000, batch_size=50, seed=42):
     # Load data
     train_input, train_target, train_classes, test_input, test_target, test_classes = prologue.generate_pair_sets(N)
+    train_target = torch.nn.functional.one_hot(train_target)
+    test_target = torch.nn.functional.one_hot(test_target)
     
     # Normalize data
     mean, std = train_input.mean(), train_input.std()
