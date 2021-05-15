@@ -31,11 +31,10 @@ class ResNetBlock(nn.Module):
 
         return y
     
-# ResNet
+# ResNet nb_residual_blocks = 4, input_channels = 2, nb_channels = 32, kernel_size = 3, nb_classes = 2
 class ResNet(nn.Module):
 
-    def __init__(self, nb_residual_blocks, input_channels, nb_channels,
-                 kernel_size = 3, nb_classes = 10):
+    def __init__(self, nb_residual_blocks = 4, input_channels = 2, nb_channels = 32, kernel_size = 3, nb_classes = 2):
         super().__init__()
 
         self.conv = nn.Conv2d(input_channels, nb_channels,
@@ -61,8 +60,7 @@ class ResNet(nn.Module):
 # ResNet + weight sharing
 class SiameseResNet(nn.Module):
 
-    def __init__(self, nb_residual_blocks, input_channels, nb_channels,
-                 kernel_size = 3, nb_classes = 10):
+    def __init__(self, nb_residual_blocks = 4, input_channels = 1, nb_channels = 32, kernel_size = 3, nb_classes = 2):
         super().__init__()
 
         self.conv = nn.Conv2d(input_channels, nb_channels,
@@ -99,8 +97,7 @@ class SiameseResNet(nn.Module):
 # ResNet + auxiliary loss
 class AuxResNet(nn.Module):
 
-    def __init__(self, nb_residual_blocks, input_channels, nb_channels,
-                 kernel_size = 3, nb_classes = 10):
+    def __init__(self, nb_residual_blocks = 4, input_channels = 1, nb_channels = 32, kernel_size = 3, nb_classes = 2):
         super().__init__()
 
         self.conv1 = nn.Conv2d(input_channels, nb_channels,
@@ -150,8 +147,7 @@ class AuxResNet(nn.Module):
 # ResNet + weight sharing + auxiliary loss
 class AuxsiameseResNet(nn.Module):
 
-    def __init__(self, nb_residual_blocks, input_channels, nb_channels,
-                 kernel_size = 3, nb_classes = 10):
+    def __init__(self, nb_residual_blocks = 4, input_channels = 1, nb_channels = 32, kernel_size = 3, nb_classes = 2):
         super().__init__()
 
         self.conv = nn.Conv2d(input_channels, nb_channels,
