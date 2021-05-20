@@ -78,7 +78,7 @@ class AuxCNN(nn.Module):
         x1 = x1.view(-1, 256)
         x1 = F.relu((self.fc11(x1)))
         x1 = self.fc21(x1)
-        aux1 = F.softmax(x1)
+        aux1 = F.softmax(x1, dim=1)
         x1 = F.relu(x1)
         
         x2 = F.relu(F.max_pool2d(self.conv12(x2), kernel_size=2)) # size [nb, 32, 6, 6]  
@@ -86,7 +86,7 @@ class AuxCNN(nn.Module):
         x2 = x2.view(-1, 256)
         x2 = F.relu((self.fc12(x2)))
         x2 = self.fc22(x2)
-        aux2 = F.softmax(x2)
+        aux2 = F.softmax(x2, dim=1)
         x2 = F.relu(x2)
         
         x = torch.cat([x1, x2], dim=1)
@@ -114,14 +114,14 @@ class AuxsiameseCNN(nn.Module):
         x1 = x1.view(-1, 256)
         x1 = F.relu((self.fc1(x1)))
         x1 = self.fc2(x1)
-        aux1 = F.softmax(x1)
+        aux1 = F.softmax(x1, dim=1)
         x1 = F.relu(x1)
         
         x2 = self.convs(x2)
         x2 = x2.view(-1, 256)
         x2 = F.relu(self.fc1(x2))
         x2 = self.fc2(x2)
-        aux2 = F.softmax(x2)
+        aux2 = F.softmax(x2, dim=1)
         x2 = F.relu(x2)
         
         x = torch.cat([x1, x2], dim=1)       
