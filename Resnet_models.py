@@ -134,8 +134,8 @@ class AuxResNet(nn.Module):
         x2 = self.fc1(x2)
         
         x = torch.cat([x1, x2], dim=1)
-        aux1 = F.softmax(x1)
-        aux2 = F.softmax(x2)
+        aux1 = F.softmax(x1, dim=1)
+        aux2 = F.softmax(x2, dim=1)
         x1 = F.relu(x1)
         x2 = F.relu(x2)
         x = torch.cat([x1, x2], dim=1)    
@@ -175,8 +175,8 @@ class AuxsiameseResNet(nn.Module):
         x2 = F.avg_pool2d(x2, 4).view(x2.size(0), -1)
         x2 = self.fc1(x2)
       
-        aux1 = F.softmax(x1)
-        aux2 = F.softmax(x2)
+        aux1 = F.softmax(x1, dim=1)
+        aux2 = F.softmax(x2, dim=1)
         x1 = F.relu(x1)
         x2 = F.relu(x2)
         x = torch.cat([x1, x2], dim=1)    
