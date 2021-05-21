@@ -3,23 +3,29 @@ from torch.utils.data import TensorDataset, DataLoader
 import dlc_practical_prologue as prologue
 import torch
 
+# Check if GPU is available
 if torch.cuda.is_available():
     device = torch.device('cuda')
 else:
     device = torch.device('cpu')
 
+# Generate data loader
 def load_data(N=1000, batch_size=50, seed=42):
     # Load data
     train_input, train_target, train_classes, test_input, test_target, test_classes = prologue.generate_pair_sets(N)
+    
+    # Convert target to one-hot label
     train_target = torch.nn.functional.one_hot(train_target)
     test_target = torch.nn.functional.one_hot(test_target)
     
+    # Move data to the device
     train_input = train_input.to(device)
     train_target = train_target.to(device)
     train_classes = train_classes.to(device)
     test_input = test_input.to(device)
     test_target = test_target.to(device)
     test_classes = test_classes.to(device)
+    
     # Normalize data
     mean, std = train_input.mean(), train_input.std()
     train_input.sub_(mean).div_(std)
