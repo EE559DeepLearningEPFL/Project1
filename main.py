@@ -36,6 +36,7 @@ for i in range(len(models)):
 # Final result
 
 # Models with optimal parameters
+# [model name, if weight sharing, if auxiliary loss, learning rate, batch size, auxiliary coefficient: alpha]
 Train_final_model = [[MLP, False, False, 5e-4, 8, 0],
               [SiameseMLP, True, False, 5e-4, 8, 0],
               [AuxMLP, False, True, 5e-3, 16, 0.9],
@@ -48,36 +49,40 @@ Train_final_model = [[MLP, False, False, 5e-4, 8, 0],
               [SiameseResNet, True, False, 5e-3, 32, 0],
               [AuxResNet, False, True, 5e-3, 32, 0.6],
               [AuxsiameseResNet, True, True, 5e-3, 32, 0.6]]
-    
-def results(Train_final_model):    
-    loss_total = []
-    index = 0
+
+# Print out the final results
+def results(Train_final_model): 
+    '''
+    every model is trained 10 times to get average accuracy and std
+    '''
+    loss_total = [] # list to store the training loss changes in each model
+    index = 0 # label the number of model
     for models in Train_final_model:
-        times = []
-        accuracies = []
-        losses = torch.empty((10,25))
+        times = [] # list to store training time
+        accuracies = [] # list to store accuracy
+        losses = torch.empty((10,25)) # list to store loss
 
         for i in range(10):
-            train_loader, test_loader = load_data(N=1000, batch_size=models[4], seed=i)
+            train_loader, test_loader = load_data(N=1000, batch_size=models[4], seed=i) # load data
             time1 = time.perf_counter()
 
-            model = models[0]()
-            model.to(device)
+            model = models[0]() # assign model
+            model.to(device) # move model to device
             losses[i,:] = torch.tensor(train(model, train_loader, models[3], 0, 25, verbose=False, siamese=models[1], aux=models[2], alpha=models[5]))
             time2 = time.perf_counter()
             times.append(time2 - time1)
 
-            tr_accuracy, te_accuracy = accu(model, train_loader, test_loader, siamese=models[1], aux=models[2])
+            tr_accuracy, te_accuracy = accu(model, train_loader, test_loader, siamese=models[1], aux=models[2]) # calculate accuracy
 
             accuracies.append(te_accuracy)
         loss_total.append(losses)
         index += 1
-    
+    # Print out results
         print('For optimal model_%d, Mean accuracy: %.3f, Std: %.3f, Mean time: %.3f, Std: %.3f' %(index, torch.tensor(accuracies).mean(), torch.tensor(accuracies).std(), torch.tensor(times).mean(), torch.tensor(times).std()))    
 
         
         
-        
+# Final results        
 results(Train_final_model)    
 
 
