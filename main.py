@@ -38,17 +38,17 @@ for i in range(len(models)):
 # Models with optimal parameters
 # [model name, if weight sharing, if auxiliary loss, learning rate, batch size, auxiliary coefficient: alpha]
 Train_final_model = [[MLP, False, False, 5e-4, 8, 0],
-              [SiameseMLP, True, False, 5e-4, 8, 0],
+              [SiameseMLP, True, False, 5e-3, 8, 0],
               [AuxMLP, False, True, 5e-3, 16, 0.9],
               [AuxsiameseMLP, True, True, 5e-3, 8, 0.7],
               [CNN, False, False, 5e-4, 16, 0],
-              [SiameseCNN, True, False, 5e-4, 16, 0],
+              [SiameseCNN, True, False, 5e-3, 32, 0],
               [AuxCNN, False, True, 5e-4, 8, 1.0],
               [AuxsiameseCNN, True, True, 5e-3, 32, 0.6],
-              [ResNet, False, False, 1e-3, 32, 0],
-              [SiameseResNet, True, False, 5e-3, 32, 0],
-              [AuxResNet, False, True, 5e-3, 32, 0.6],
-              [AuxsiameseResNet, True, True, 5e-3, 32, 0.6]]
+              [ResNet, False, False, 1e-3, 16, 0],
+              [SiameseResNet, True, False, 1e-3, 16, 0],
+              [AuxResNet, False, True, 1e-3, 64, 0.7],
+              [AuxsiameseResNet, True, True, 1e-3, 16, 0.8]]
 
 # Print out the final results
 def results(Train_final_model): 
@@ -62,13 +62,13 @@ def results(Train_final_model):
         accuracies = [] # list to store accuracy
         losses = torch.empty((10,25)) # list to store loss
 
-        for i in range(10):
+        for i in range(10,20):
             train_loader, test_loader = load_data(N=1000, batch_size=models[4], seed=i) # load data
             time1 = time.perf_counter()
 
             model = models[0]() # assign model
             model.to(device) # move model to device
-            losses[i,:] = torch.tensor(train(model, train_loader, models[3], 0, 25, verbose=False, siamese=models[1], aux=models[2], alpha=models[5]))
+            losses[i-10,:] = torch.tensor(train(model, train_loader, models[3], 0, 25, verbose=False, siamese=models[1], aux=models[2], alpha=models[5]))
             time2 = time.perf_counter()
             times.append(time2 - time1)
 
