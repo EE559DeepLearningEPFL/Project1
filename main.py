@@ -36,13 +36,12 @@ for i in range(len(models)):
 # Final result
 
 # Models with optimal parameters
-# [model name, if weight sharing, if auxiliary loss, learning rate, batch size, auxiliary coefficient: alpha]
 Train_final_model = [[MLP, False, False, 5e-4, 8, 0],
               [SiameseMLP, True, False, 5e-3, 8, 0],
               [AuxMLP, False, True, 5e-3, 16, 0.9],
               [AuxsiameseMLP, True, True, 5e-3, 8, 0.7],
               [CNN, False, False, 5e-4, 16, 0],
-              [SiameseCNN, True, False, 5e-3, 32, 0],
+              [SiameseCNN, True, False, 1e-3, 16, 0],
               [AuxCNN, False, True, 5e-4, 8, 1.0],
               [AuxsiameseCNN, True, True, 5e-3, 32, 0.6],
               [ResNet, False, False, 1e-3, 16, 0],
@@ -50,7 +49,8 @@ Train_final_model = [[MLP, False, False, 5e-4, 8, 0],
               [AuxResNet, False, True, 1e-3, 64, 0.7],
               [AuxsiameseResNet, True, True, 1e-3, 16, 0.8]]
 
-# Print out the final results
+
+
 def results(Train_final_model): 
     '''
     every model is trained 10 times to get average accuracy and std
@@ -84,6 +84,7 @@ def results(Train_final_model):
         
 # Final results        
 results(Train_final_model)    
+  
 
 
 
