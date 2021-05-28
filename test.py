@@ -12,6 +12,11 @@ from helper import *
 from data_loader import *
 from train import *
 
+
+print("-------------------------------------------------------")
+print("---------- Number of parameters in each model----------")
+print("-------------------------------------------------------")
+
 # Print out the parameters of each model
 model_1 = MLP()
 model_2 = SiameseMLP()
@@ -30,9 +35,14 @@ models = [model_1, model_2, model_3, model_4, model_5, model_6, model_7, model_8
 for i in range(len(models)):
     print('The number of parameters in model_%d is %d' %
                   (i+1, count_param(models[i])))
-    
-    
-    
+
+
+print("The next section is to get the mean accuracy and the std of 10 round training for all models,")
+print("It may take quite some time(1-2 hours in our machine) to finish.")   
+
+print("-------------------------------------------------------")
+print("---------------- Start of section ---------------------")
+print("-------------------------------------------------------") 
 # Final result
 
 # Models with optimal parameters
@@ -48,6 +58,8 @@ Train_final_model = [[MLP, False, False, 5e-4, 8, 0],
               [SiameseResNet, True, False, 1e-3, 16, 0],
               [AuxResNet, False, True, 1e-3, 64, 0.7],
               [AuxsiameseResNet, True, True, 1e-3, 16, 0.8]]
+
+
 
 
 
@@ -85,7 +97,9 @@ def results(Train_final_model):
 # Final results        
 results(Train_final_model)    
   
-
+print("-------------------------------------------------------")
+print("---------------- End of section -----------------------")
+print("-------------------------------------------------------")
 
 
 
