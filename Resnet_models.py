@@ -153,25 +153,20 @@ class AuxResNet(nn.Module):
         x1 = self.resnet_blocks1(x1)
         x1 = F.avg_pool2d(x1, 4).view(x1.size(0), -1) # flatten
         x1 = self.fc1(x1)
-        # softmax for the auxiliary output layer of first channel
-        aux1 = F.softmax(x1, dim=1)
-        x1 = F.relu(x1)
         
         # train the second splitted image in second channel
         x2 = F.relu(self.bn2(self.conv2(x2)))
         x2 = self.resnet_blocks2(x2)
         x2 = F.avg_pool2d(x2, 4).view(x2.size(0), -1) # flatten
         x2 = self.fc1(x2)
-        # softmax for the auxiliary output layer of second channel
-        aux2 = F.softmax(x2, dim=1)
-        x2 = F.relu(x2)
         
         # concatenate the results of two channels
         x = torch.cat([x1, x2], dim=1)
+        x = F.relu(x)
         
         x = torch.sigmoid(self.fc(x))    
         
-        return x, aux1, aux2
+        return x, x1, x2
     
 
 # ResNet + weight sharing + auxiliary loss
@@ -207,25 +202,20 @@ class AuxsiameseResNet(nn.Module):
         x1 = self.resnet_blocks(x1)
         x1 = F.avg_pool2d(x1, 4).view(x1.size(0), -1) # flatten
         x1 = self.fc1(x1)
-        # softmax for the auxiliary output layer of first channel
-        aux1 = F.softmax(x1, dim=1)
-        x1 = F.relu(x1)
         
         # train the second splitted image in second channel
         x2 = F.relu(self.bn(self.conv(x2)))
         x2 = self.resnet_blocks(x2)
         x2 = F.avg_pool2d(x2, 4).view(x2.size(0), -1) # flatten
         x2 = self.fc1(x2)
-        # softmax for the auxiliary output layer of second channel
-        aux2 = F.softmax(x2, dim=1)
-        x2 = F.relu(x2)
         
         # concatenate the results of two channels
         x = torch.cat([x1, x2], dim=1)
+        x = F.relu(x)
         
         x = torch.sigmoid(self.fc(x)) 
         
-        return x, aux1, aux2
+        return x, x1, x2
     
     
     
