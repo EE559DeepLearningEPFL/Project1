@@ -102,9 +102,6 @@ class AuxCNN(nn.Module):
         x1 = x1.view(-1, 256) # flatten
         x1 = F.relu((self.fc11(x1)))
         x1 = self.fc21(x1)
-        # softmax for the auxiliary output layer of first channel
-        aux1 = F.softmax(x1, dim=1) # size n*10
-        x1 = F.relu(x1)
         
         # train the second splitted image in second channel
         x2 = F.relu(F.max_pool2d(self.conv12(x2), kernel_size=2)) # size [n, 32, 6, 6]  
@@ -112,16 +109,14 @@ class AuxCNN(nn.Module):
         x2 = x2.view(-1, 256) # flatten
         x2 = F.relu((self.fc12(x2)))
         x2 = self.fc22(x2)
-        # softmax for the auxiliary output layer of second channel
-        aux2 = F.softmax(x2, dim=1) # size n*10
-        x2 = F.relu(x2)
         
         # concatenate the results of two channels
         x = torch.cat([x1, x2], dim=1) # size n*20
-        
+        x = F.relu(x)
+                
         x = torch.sigmoid(self.fc3(x)) # size n*2
         
-        return x, aux1, aux2
+        return x, x1, x2
     
 # CNN + weight sharing + auxiliary loss
 class AuxsiameseCNN(nn.Module):
@@ -149,25 +144,20 @@ class AuxsiameseCNN(nn.Module):
         x1 = x1.view(-1, 256) # flatten
         x1 = F.relu((self.fc1(x1)))
         x1 = self.fc2(x1)
-        # softmax for the auxiliary output layer of first channel
-        aux1 = F.softmax(x1, dim=1) # size n*10
-        x1 = F.relu(x1)
         
         # train the second splitted image in second channel
         x2 = self.convs(x2)
         x2 = x2.view(-1, 256) # flatten
         x2 = F.relu(self.fc1(x2))
         x2 = self.fc2(x2)
-        # softmax for the auxiliary output layer of second channel
-        aux2 = F.softmax(x2, dim=1) # size n*10
-        x2 = F.relu(x2)
         
         # concatenate the results of two channels
         x = torch.cat([x1, x2], dim=1) # size n*20   
+        x = F.relu(x)
         
         x = torch.sigmoid(self.fc3(x)) # size n*2
         
-        return x, aux1, aux2
+        return x, x1, x2
 
 
 
